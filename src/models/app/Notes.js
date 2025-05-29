@@ -4,7 +4,7 @@ const { _commonKeys } = require('@src/utils/helpers/collection');
 
 const notesSchema = new mongoose.Schema({
     document_id: { type: String, required: true },
-    customer_id: { type: String, unique: true, required: true },
+    customer_id: { type: String, required: true },
     note: {
         type: String,
         required: true,
