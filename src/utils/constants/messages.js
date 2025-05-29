@@ -35,6 +35,7 @@ module.exports = {
         created: (name) => `${name || "Record"} created successfully.`,
         updated: (name) => `${name || "Record"} updated successfully.`,
         notFound: (key) => `${key || "Record"} not found.`,
+        required: (key) => `${key || "Record"} required.`,
         exportCsv: (key) => `${key || "Record"} downloaded successfully.`,
         deleted: (name) => `${name || "Record"} deleted successfully.`,
         allReadyDeleted: (key) => `${key || "Data"} already deleted.`,
