@@ -11,7 +11,7 @@ const notesSchema = new mongoose.Schema({
         maxlength: [500, 'Note can only be maximum of 500 characters']
     },
     dateNTime: { type: Date, default: Date.now },
-    status: { type: Number, enum: Object.values(_status), default: _status.Active },
+    status: { type: String, enum: Object.values(_status), default: _status.Active },
     ..._commonKeys
 }, { timestamps: true });
 

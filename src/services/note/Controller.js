@@ -19,17 +19,6 @@ module.exports.createNote = async (req, res) => {
             );
         }
 
-        // const existingNote = await Note.findOne({ document_id, customer_id, deletedAt: null });
-
-        // if (existingNote) {
-        //     return res.status(403).send(
-        //         new serviceResponse({
-        //             status: 403,
-        //             errors: [{ message: _response_message.allReadyExist("Note for this customer and document") }]
-        //         })
-        //     );
-        // }
-
         const newNote = new Note({
             document_id,
             customer_id,
@@ -39,13 +28,7 @@ module.exports.createNote = async (req, res) => {
 
         await newNote.save();
 
-        res.status(201).send(
-            new serviceResponse({
-                status: 201,
-                data: newNote,
-                message: "Note created successfully",
-            })
-        );
+        res.status(201).send(new serviceResponse({ status: 201, data: newNote, message: "Note created successfully" }));
     } catch (error) {
         _handleCatchErrors(error, res);
     }
