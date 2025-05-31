@@ -1,6 +1,7 @@
 const _collectionName = {
     User: 'User',
     Note: 'note',
+    Favorite: 'favorite',
 }
 
 const _status = {
