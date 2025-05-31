@@ -13,6 +13,6 @@ const favoriteSchema = new mongoose.Schema({
     ..._commonKeys
 }, { timestamps: true });
 
-const Favorite = mongoose.model(_collectionName.Note, favoriteSchema)
+const Favorite = mongoose.model(_collectionName.Favorite, favoriteSchema)
 
 module.exports = { Favorite }
