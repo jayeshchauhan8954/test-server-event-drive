@@ -5,7 +5,7 @@ const { _commonKeys } = require('@src/utils/helpers/collection');
 const favoriteSchema = new mongoose.Schema({
     document_id: { type: String, required: true },
     customer_id: { type: String, required: true },
-    note: {
+    isFavorite: {
         type: Boolean,
         default: false
     },
