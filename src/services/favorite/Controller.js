@@ -34,7 +34,7 @@ module.exports.createFavorite = async (req, res) => {
 
         const updatedFavorite = await Favorite.findOneAndUpdate(
             { document_id, customer_id },
-            { $set: { note: favorite, document_id, customer_id } },
+            { $set: { isFavorite: favorite, document_id, customer_id } },
             { new: true, upsert: true, runValidators: true, setDefaultsOnInsert: true }
         );
 
@@ -97,6 +97,57 @@ module.exports.getFavorites = async (req, res) => {
                 status: 200,
                 data: favorites,
                 message: "Favorites retrieved successfully.",
+            })
+        );
+    } catch (error) {
+        _handleCatchErrors(error, res);
+    }
+};
+
+
+/**
+ * Get active favorites for a specific customer.
+ * Filters by customer_id and where isFavorite is true.
+ * Does not require document_id.
+ */
+module.exports.getCustomerActiveFavorites = async (req, res) => {
+    // #swagger.tags = ['favorite'] // Assuming the same Swagger tag is appropriate
+    try {
+        const { customer_id } = req.query;
+
+        if (!customer_id) {
+            return res.status(400).send(
+                new serviceResponse({
+                    status: 400,
+                    errors: [{ message: _response_message.required("Customer ID") }]
+                })
+            );
+        }
+
+        // Query to find favorites for the customer where isFavorite is true and not deleted
+        const query = {
+            customer_id: customer_id,
+            isFavorite: true,
+            deletedAt: null
+        };
+
+        const favorites = await Favorite.find(query).sort({ createdAt: -1 });
+
+        if (!favorites || favorites.length === 0) {
+            return res.status(200).send(
+                new serviceResponse({
+                    status: 200,
+                    data: [],
+                    message: "No active favorites found for this customer.",
+                })
+            );
+        }
+
+        res.status(200).send(
+            new serviceResponse({
+                status: 200,
+                data: favorites,
+                message: "Active favorites retrieved successfully.",
             })
         );
     } catch (error) {
