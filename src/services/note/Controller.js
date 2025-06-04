@@ -70,3 +70,86 @@ module.exports.getNotes = async (req, res) => {
         _handleCatchErrors(error, res);
     }
 };
+
+module.exports.editNote = async (req, res) => {
+    // #swagger.tags = ['notes']
+    try {
+        const { note_id: id } = req.params;
+        const { note } = req.body;
+
+        if (!id || !note) {
+            return res.status(400).send(
+                new serviceResponse({
+                    status: 400,
+                    errors: [{ message: _response_message.required("Note ID and Note content") }]
+                })
+            );
+        }
+
+        const updatedNote = await Note.findByIdAndUpdate(
+            id,
+            { note, updatedAt: new Date() },
+            { new: true }
+        );
+
+        if (!updatedNote) {
+            return res.status(404).send(
+                new serviceResponse({
+                    status: 404,
+                    errors: [{ message: "Note not found" }]
+                })
+            );
+        }
+
+        res.status(200).send(
+            new serviceResponse({
+                status: 200,
+                data: updatedNote,
+                message: "Note updated successfully",
+            })
+        );
+    } catch (error) {
+        _handleCatchErrors(error, res);
+    }
+};
+
+module.exports.softDeleteNote = async (req, res) => {
+    // #swagger.tags = ['notes']
+    try {
+        const { note_id: id } = req.params;
+
+        if (!id) {
+            return res.status(400).send(
+                new serviceResponse({
+                    status: 400,
+                    errors: [{ message: _response_message.required("Note ID") }]
+                })
+            );
+        }
+
+        const deletedNote = await Note.findByIdAndUpdate(
+            id,
+            { deletedAt: new Date() },
+            { new: true }
+        );
+
+        if (!deletedNote) {
+            return res.status(404).send(
+                new serviceResponse({
+                    status: 404,
+                    errors: [{ message: "Note not found" }]
+                })
+            );
+        }
+
+        res.status(200).send(
+            new serviceResponse({
+                status: 200,
+                data: deletedNote,
+                message: "Note deleted successfully",
+            })
+        );
+    } catch (error) {
+        _handleCatchErrors(error, res);
+    }
+};
